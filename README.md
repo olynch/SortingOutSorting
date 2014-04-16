@@ -8,8 +8,8 @@ This purpose of this project is to compare different sorting algorithms and see 
 #####Dependencies
 
 - A working C++11 compiler (clang and gcc both work).
-- The Boost libraries (boost.org)[www.boost.org].
-- CMake (cmake.org)[www.cmake.org].
+- The Boost libraries (www.boost.org).
+- CMake (www.cmake.org).
 - Make (or ninja).
 
 #####Instructions
