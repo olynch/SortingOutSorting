@@ -141,6 +141,7 @@ void sort_timer::quickS(vector<int>& A) {
 // Insertion Sort
 
 void sort_timer::insertionS(vector<int>& A) {
+	if (A.size() <= 1) return;
 	for (iter i = A.begin() + 1; i != A.end(); ++i) {
 		// start at A[1], so that A[-1] isn't accessed in the next thing
 		for (iter j = i; j != A.begin(); --j) {
@@ -246,17 +247,15 @@ void sort_timer::bucketS(vector<int>& A) {
 	//choose different factors based on size of A
 	int num_buckets = A.size() / factor;
 	int bucket_range = (max(A) / num_buckets) + 1; // the hash function for the buckets is n / bucket_range
-	vector<priority_queue<int, vector<int>, greater<int> > > buckets (num_buckets + 1);
-	// priority queues built on minheaps
+	vector<vector<int>> buckets (num_buckets + 1);
 	for (iter i = A.begin(); i != A.end(); ++i)
 		// add *i onto the priority queue at bucket[hash(*i)]
-		buckets[*i / bucket_range].push(*i);
+		buckets[*i / bucket_range].push_back(*i);
 	iter pos = A.begin(); //this iter is used to reference all of
-	for (vector<priority_queue<int, vector<int>, greater<int> > >::iterator i = buckets.begin(); i != buckets.end(); ++i) {
-		while (! i->empty()) {
-			//while the priority queue still has stuff, put the stuff back onto A and then pop it off
-			*pos = i->top();
-			i->pop();
+	for (vector<vector<int>>::iterator i = buckets.begin(); i != buckets.end(); ++i) {
+		insertionS(*i);
+		for (iter j = i->begin(); j != i->end(); ++j) {
+			*pos = *j;
 			++pos;
 		}
 	}

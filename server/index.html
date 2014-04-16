@@ -4,6 +4,9 @@
 <title>SortingOutSorting Graphs</title>
 <script src="/jquery.min.js"></script>
 <script src="/canvasjs.min.js"></script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 <style type="text/css">
 .chart {
 	height: 500px;
@@ -12,37 +15,147 @@
 </style>
 </head>
 <body>
+<article>
+<p>
+Sorting Out Sorting <br />
+Computers 3 Tompsett <br />
+Author: Owen Lynch, graphs credit to CanvasJS.com
+</p>
+<div id="maingraph" class="chart"></div>
+<p>
+From this graph we can clearly see that as long as you don't pick insertion sort, selection sort, or especially bubble sort you'll be fine. Obviously sorting is not as simple as this, so I have also included other graphs.
+</p>
+<div id="smallsort-graph" class="chart"></div>
+<p>
+The weird thing here is that counting sort actually takes a shorter average time to run on the 100,000 element arrays than it did on the 75,000 element arrays. I honestly have no idea why. The reason these graphs don't look like logarithmic graphs is because the x axis is strange.
 <div id="chart10" class="chart"></div>
+<p>
+It's unfortunate that counting sort dominates the scale of this graph. Interesting highlights nonetheless include a very low average for insertion sort. Clearly for small arrays, insertion sort is the way to go. One surprise here was heap sort's win over quicksort; it seems that its lack of heavy recursion was a boon.
+</p>
 <div id="chart50" class="chart"></div>
+<p>
+Again, insertion sort has the lead, which surprised me; I though we'd see one of the \( \mathcal{O}(n\log n) \) sorts come up ahead here. Otherwise, similar to the length 10, though bucket sort only doubled, growing far more slowly than anything else. Counting sort as well stayed basically constant.
+</p>
 <div id="chart100" class="chart"></div>
+<p>
+Insertion sort still is winning here, though quick sort is catching up. Merge sort is doing surprisingly badly, and bucket sort continues to slow down, but it's still doing badly.
+</p>
 <div id="chart500" class="chart"></div>
+<p>
+Finally, insertion sort gives up the lead, and quicksort takes it for a while. Heapsort continues to do remarkably well, given its complexity, and bucket sort has caught up and started to perform better than merge sort, even.
+</p>
 <div id="chart1000" class="chart"></div>
+<p>
+Same trends as 500.
+</p>
 <div id="chart5000" class="chart"></div>
+<p>
+Bucket sort takes the lead, barely edging out quick sort! Counting sort is also back in the game.
+</p>
 <div id="chart10000" class="chart"></div>
+<p>
+Quicksort remains quite good, but it just can't compete with the \( \mathcal{O}(n) \) bucket sort. Counting sort, meanwhile is hot on their heels.
+</p>
 <div id="chart50000" class="chart"></div>
+Even with the O(nlogn) runtime, quicksort remains very competetive with the two \( \mathcal{O}(n) \) sorts. Meanwhile, no big shocker; bubble sort is far and away the worst sort.
 <div id="chart75000" class="chart"></div>
+<p>
+AND COUNTING SORT TAKES THE LEAD FROM DEAD-LAST! I'm sure many of you are just as surprised as I am, it's been a long race, and I'm sure many of you who bet good money on quicksort have been sorely dissapointed.
+</p>
 <div id="chart100000" class="chart"></div>
+<p>
+In the final leg, counting sort goes in almost half the time of any other, with bucket sort and quick sort runners up. I must say, it's been an exciting day.
+</p>
+<h1> Big-O's </h1>
+<ul>
+	<li> Bubble Sort: \( \mathcal{O}(n^2) \)</li>
+	<li> Merge Sort: \( \mathcal{O}(n\log n) \)</li>
+	<li> Quick Sort: \( \mathcal{O}(n\log n) \)</li>
+	<li> Insertion Sort: \( \mathcal{O}(n^2) \)</li>
+	<li> Selection Sort: \( \mathcal{O}(n^2) \)</li>
+	<li> Heap Sort: \( \mathcal{O}(n\log n) \)</li>
+	<li> Counting Sort: \( \mathcal{O}(n) \)</li>
+	<li> Bucket Sort: \( \mathcal{O}(n) \)</li>
+</ul>
+</article>
 <script type="text/javascript">
 window.onload = function() {
-	console.log("window loaded");
-	var lengths = [10, 50, 100, 500, 1000, 5000, 10000, 50000, 75000, 100000];
-	for (i = 0; i < lengths.length; i++) {
-		console.log(i);
-		console.log("chart" + lengths[i]);
-		$.getJSON("/arrays" + lengths[i] + ".json", function(data) {
-				var chartID = "chart" + data.length;
-				data.title = { text: "Data For Sorting Arrays of Length " + data.length };
-				data.axisX = { labelFontSize: 10 };
-				data.axisY = { title: "Average Time in Nanoseconds", titleFontSize: 20 };
-				data.data[0].type = "column";
-				data.data[0].indexLabelFontSize = 12;
-				data.data[0].indexLabel = "{y}ns";
-				data.theme = "theme2";
-				console.log(data);
-				var chart = new CanvasJS.Chart(chartID, data);
-				chart.render();
-		});
-	}
+	$.getJSON("/linegraph.json", function(data) {
+			data.title = { text: "SortingOutSorting Over-All Line Graph" };
+			data.axisX = { labelFontSize: 10 };
+			data.axisY = { title: "Average Time in Nanoseconds", titleFontSize: 20 };
+			data.legend = { horizontalAlign: "right" };
+			for (var i = 0; i < 8; i++) {
+				data.data[i].type = "line";
+				data.data[i].showInLegend = "true";
+				switch (i) {
+				case 0:
+					data.data[i].toolTipContent = "bubble sort, average time: {y}ns";
+					data.data[i].name = "bubble sort";
+					break;
+				case 1:
+					data.data[i].toolTipContent = "merge sort, average time: {y}ns";
+					data.data[i].name = "merge sort";
+					break;
+				case 2:
+					data.data[i].toolTipContent = "quick sort, average time: {y}ns";
+					data.data[i].name = "quick sort";
+					break;
+				case 3:
+					data.data[i].toolTipContent = "insertion sort, average time: {y}ns";
+					data.data[i].name = "insertion sort";
+					break;
+				case 4:
+					data.data[i].toolTipContent = "selection sort, average time: {y}ns";
+					data.data[i].name = "selection sort";
+					break;
+				case 5:
+					data.data[i].toolTipContent = "heap sort, average time: {y}ns";
+					data.data[i].name = "heap sort";
+					break;
+				case 6:
+					data.data[i].toolTipContent = "counting sort, average time: {y}ns";
+					data.data[i].name = "counting sort";
+					break;
+				case 7:
+					data.data[i].toolTipContent = "bucket sort, average time: {y}ns";
+					data.data[i].name = "bucket sort";
+					break;
+				}
+			}
+			data.theme = "theme2";
+			var smallSortChartData = {};
+			jQuery.extend(true, smallSortChartData, data);
+			smallSortChartData.data.splice(0, 1);
+			smallSortChartData.data.splice(2, 1);
+			smallSortChartData.data.splice(2, 1); //remove bubble, insertion, and selection
+			smallSortChartData.title.text = "SortingOutSorting Data For Smaller Sorts";
+			var allSortChart = new CanvasJS.Chart("maingraph", data);
+			var smallSortChart = new CanvasJS.Chart("smallsort-graph", smallSortChartData);
+			allSortChart.render();
+			smallSortChart.render();
+			var lengths = [10, 50, 100, 500, 1000, 5000, 10000, 50000, 75000, 100000];
+			for (i = 0; i < lengths.length; i++) {
+				console.log(i);
+				console.log("chart" + lengths[i]);
+				$.getJSON("/columngraph" + lengths[i] + ".json", function(data) {
+						var chartID = "chart" + data.length;
+						data.title = { text: "Data For Sorting Arrays of Length " + data.length };
+						data.axisX = { labelFontSize: 10 };
+						data.axisY = { title: "Average Time in Nanoseconds", titleFontSize: 20 };
+						data.data[0].type = "column";
+						data.data[0].indexLabelFontSize = 12;
+						data.data[0].indexLabel = "{y}ns";
+						data.theme = "theme2";
+						for (var i = 0; i < 8; i++) {
+							data.data[0].dataPoints[i].y = Math.round(data.data[0].dataPoints[i].y);
+						}
+						console.log(data);
+						var chart = new CanvasJS.Chart(chartID, data);
+						chart.render();
+				});
+			}
+	});
 }
 </script>
 </body>

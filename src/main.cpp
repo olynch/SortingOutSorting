@@ -10,7 +10,8 @@ using namespace std;
 // globals
 vector<string> FILEPATTERN ({ "data/unsorted_arrays/arrays", ".txt" }); // may be changed in main from arguments
 const vector<int> FILENUMS ({ 10, 50, 100, 500, 1000, 5000, 10000, 50000, 75000, 100000 });
-const vector<string> JSONOUTPUTPATTERN ({ "server/arrays", ".json"});
+const string LINE_GRAPH_JSON_OUTPUTFILE ("server/linegraph.json");
+const vector<string> COLUMN_GRAPHS_JSON_OUTPUTPATTERN ({"server/columngraph", ".json"});
 
 void testAlgorithms(const int filenum_pos, matrix3D& sort_data) {
 	// tests all the algorithms on arrays(length).txt, and records the time it takes into sort_data
@@ -69,7 +70,7 @@ double getAverageTime(const matrix3D& sort_data, const int sort, const int array
 	return sum/100.0;
 }
 
-void JSONify(const matrix3D& sort_data) {
+void JSONify_ColumnGraphs(const matrix3D& sort_data) {
 	/*
 	 * This method takes in a matrix3D of the times for each sort,
 	 * computes the average time for each length of array and sort combination
@@ -80,15 +81,15 @@ void JSONify(const matrix3D& sort_data) {
 		/*
 		 * The final json should look like:
 		 * {
-		 * 	  "data": [
-		 * 	     {
-		 * 	         "dataPoints": [
-		 * 	             { "label": "sort_type", "y": average_time },
-		 * 	             etc.
-		 * 	         ]
-		 * 	     }
-		 * 	  ],
-		 * 	  "length": array_length,
+		 *    "data": [
+		 *         {
+		 *             "dataPoints": [
+		 * 			       { "label": "sort_type", "y": average_time },
+		 *                 etc.
+		 *              ]
+		 *         }
+		 *     ],
+		 *     "length": array_length,
 		 * }
 		 * CanvasJS attributes, like font size, title, etc. are set by the javascript frontend
 		 * so that this program doesn't have to be rerun if anything needs to change
@@ -136,11 +137,56 @@ void JSONify(const matrix3D& sort_data) {
 
 		// write the json from root out to the output file
 		stringstream filename;
-		filename << JSONOUTPUTPATTERN[0] << FILENUMS[i] << JSONOUTPUTPATTERN[1];
+		filename << COLUMN_GRAPHS_JSON_OUTPUTPATTERN[0] << FILENUMS[i] << COLUMN_GRAPHS_JSON_OUTPUTPATTERN[1];
 		ofstream outputFile (filename.str());
 		outputFile << Serialize(root);
 		outputFile.close();
 	}
+}
+
+void JSONify_BigLineGraph(const matrix3D& sort_data) {
+	/*
+	 * This method takes in a matrix3D of the times for each sort,
+	 * computes the average time for each length of array and sort combination
+	 * and outputs it into CanvasJS-readable format
+	 */
+	using namespace json;
+	/*
+	 * The final json should look like:
+	 * {
+	 * 	  "data": [
+	 * 	     {
+	 * 	         "dataPoints": [
+	 * 	             { "length": length, "y": average_time, "x": filenum_pos },
+	 * 	             etc.
+	 * 	         ]
+	 * 	     }
+	 * 	  ],
+	 * }
+	 * CanvasJS attributes, like font size, title, etc. are set by the javascript frontend
+	 * so that this program doesn't have to be rerun if anything needs to change
+	 */
+	Object root;
+	Array data;
+	for (int i = 0; i < 8; ++i) {
+		Object data_set;
+		Array dataPoints;
+		for (int j = 0; j < FILENUMS.size(); ++j) {
+			Object datapoint;
+			datapoint["length"] = FILENUMS[j];
+			datapoint["label"] = FILENUMS[j];
+			datapoint["y"] = getAverageTime(sort_data, i, j);
+			dataPoints.push_back(datapoint);
+		}
+		data_set["dataPoints"] = dataPoints;
+		data.push_back(data_set);
+	}
+	root["data"] = data;
+
+	// write the json from root out to the output file
+	ofstream outputFile (LINE_GRAPH_JSON_OUTPUTFILE);
+	outputFile << Serialize(root);
+	outputFile.close();
 }
 
 int main(int argc, char** argv) {
@@ -171,5 +217,6 @@ int main(int argc, char** argv) {
 		cout << "working on arrays" << FILENUMS[i] << ".txt" << "\n";
 		testAlgorithms(i, sort_data);
 	}
-	JSONify(sort_data);
+	JSONify_ColumnGraphs(sort_data);
+	JSONify_BigLineGraph(sort_data);
 }
