@@ -14,7 +14,7 @@ This purpose of this project is to compare different sorting algorithms and see 
 
 #####Instructions
 
-1. Run `cmake .` in the root directory of the project. (If you want to use ninja, run `cmake -G Ninja`).
+1. Run `cmake .` in the root directory of the project. (If you want to use ninja, run `cmake -G Ninja .`).
 2. Run `make` (or `ninja`).
 3. Run the executable with `./bin/SortingOutSorting`. It requires two arguments, the beginning and end of the path to each data file. For instance if the data files are in data/unsortedarrays/arrays(n).txt, you should run `./bin/SortingOutSorting data/unsortedarrays .txt`.
 
