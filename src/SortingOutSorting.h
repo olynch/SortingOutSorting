@@ -7,9 +7,7 @@
 #include <vector>
 #include <chrono>
 #include <string>
-#include <stdexcept>
 #include <map>
-#include <iostream>
 #include <algorithm>
 #include <random>
 #include <functional>
@@ -24,14 +22,12 @@
 
 #ifndef SORTINGOUTSORTING_H_
 #define SORTINGOUTSORTING_H_
+//declare useful shortcuts
 typedef std::vector<int>::iterator iter;
 typedef std::vector<int>::const_iterator const_iter;
 typedef boost::multi_array<unsigned long, 3> matrix3D;
 
-//enum sort_types {
-//	bubble, merge, quick, insertion, selection, heap, counting, bucket
-//};
-
+//declare important methods
 namespace sort_timer {
 	void bubbleS(std::vector<int>& A);
 	void mergeS(std::vector<int>& A);
