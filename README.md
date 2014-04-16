@@ -25,4 +25,4 @@ If you decide to rerun all of the sorts, the results will be placed in the .json
 
 ###Credits
 
-For json.cpp and json.h, credit goes to Jeff Weinstein (SuperEasyJSON (c) 2013). It's simple, compact, and easy to add in, and I appreciate that.
+For json.cpp and json.h, credit goes to Jeff Weinstein (SuperEasyJSON &copy; 2013). It's simple, compact, and easy to add in, and I appreciate that.
