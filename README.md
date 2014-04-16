@@ -9,7 +9,7 @@ This purpose of this project is to compare different sorting algorithms and see 
 
 - A working C++11 compiler (clang and gcc both work).
 - The Boost libraries (boost.org)[www.boost.org].
-- CMake (cmakebuilder.com)[www.cmakebuilder.com].
+- CMake (cmake.org)[www.cmake.org].
 - Make (or ninja).
 
 #####Instructions
