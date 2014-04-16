@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+<title>SortingOutSorting Graphs</title>
+<script src="/jquery.min.js"></script>
+<script src="/canvasjs.min.js"></script>
+<style type="text/css">
+.chart {
+	height: 500px;
+	width: 1000px;
+}
+</style>
+</head>
+<body>
+<div id="chart10" class="chart"></div>
+<div id="chart50" class="chart"></div>
+<div id="chart100" class="chart"></div>
+<div id="chart500" class="chart"></div>
+<div id="chart1000" class="chart"></div>
+<div id="chart5000" class="chart"></div>
+<div id="chart10000" class="chart"></div>
+<div id="chart50000" class="chart"></div>
+<div id="chart75000" class="chart"></div>
+<div id="chart100000" class="chart"></div>
+<script type="text/javascript">
+window.onload = function() {
+	console.log("window loaded");
+	var lengths = [10, 50, 100, 500, 1000, 5000, 10000, 50000, 75000, 100000];
+	for (i = 0; i < lengths.length; i++) {
+		console.log(i);
+		console.log("chart" + lengths[i]);
+		$.getJSON("/arrays" + lengths[i] + ".json", function(data) {
+				var chartID = "chart" + data.length;
+				data.title = { text: "Data For Sorting Arrays of Length " + data.length };
+				data.axisX = { labelFontSize: 10 };
+				data.axisY = { title: "Average Time in Nanoseconds", titleFontSize: 20 };
+				data.data[0].type = "column";
+				data.data[0].indexLabelFontSize = 12;
+				data.data[0].indexLabel = "{y}ns";
+				data.theme = "theme2";
+				console.log(data);
+				var chart = new CanvasJS.Chart(chartID, data);
+				chart.render();
+		});
+	}
+}
+</script>
+</body>
+</html>

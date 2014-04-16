@@ -1,0 +1,1 @@
+{"data":[{"dataPoints":[{"label":"bubble sort","y":928220.000000},{"label":"merge sort","y":230760.000000},{"label":"quick sort","y":68270.000000},{"label":"insertion sort","y":469960.000000},{"label":"selection sort","y":814360.000000},{"label":"heap sort","y":68890.000000},{"label":"counting sort","y":2260560.000000},{"label":"bucket sort","y":115880.000000}]}],"length":1000}
